@@ -74,6 +74,24 @@ textarea{resize:vertical;min-height:58px}
         <label class="opt"><input type="radio" name="sexo" value="Intersexo" onclick="toggleSexo()"> Intersexo</label>
       </div>
     </div>
+    <div class="q"><label class="q-l">Identidade de gênero</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="genero" value="Cisgênero"> Cisgênero</label>
+        <label class="opt"><input type="radio" name="genero" value="Mulher trans"> Mulher trans</label>
+        <label class="opt"><input type="radio" name="genero" value="Homem trans"> Homem trans</label>
+        <label class="opt"><input type="radio" name="genero" value="Não-binário"> Não-binário</label>
+        <label class="opt"><input type="radio" name="genero" value="Prefiro não informar"> Prefiro não informar</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Orientação sexual</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="orientacao" value="Heterossexual"> Heterossexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Homossexual"> Homossexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Bissexual"> Bissexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Assexual"> Assexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Outra/prefiro não informar"> Outra / prefiro não informar</label>
+      </div>
+    </div>
     <div class="q"><label class="q-l">Seu e-mail (se quiser receber uma cópia das respostas)</label><input type="email" name="email_paciente" placeholder="seunome@email.com"></div>
   </div>
 
@@ -304,7 +322,19 @@ textarea{resize:vertical;min-height:58px}
         <label class="opt"><input type="radio" name="psicoterapia" value="Não"> Não</label>
       </div>
     </div>
-    <!-- Saúde sexual condicional ao sexo -->
+  </div>
+
+  <!-- 11 SAÚDE SEXUAL (sempre visível) -->
+  <div class="sec">
+    <h2><span class="n">11</span> Saúde sexual</h2>
+    <div class="q"><label class="q-l">Desde a última consulta, percebeu alguma alteração na libido (desejo) ou no funcionamento sexual?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="sexual" value="Não" onchange="condSexual()"> Não</label>
+        <label class="opt"><input type="radio" name="sexual" value="Sim" onchange="condSexual()"> Sim</label>
+        <label class="opt"><input type="radio" name="sexual" value="Prefiro conversar na consulta" onchange="condSexual()"> Prefiro conversar na consulta</label>
+      </div>
+      <textarea name="sexual_desc" id="sexual_desc" placeholder="Descreva, se se sentir confortável (ex: redução do desejo, dificuldade, dor, mudança após a medicação...)" style="margin-top:8px;display:none"></textarea>
+    </div>
     <div class="q" id="bloco_mulher" style="display:none">
       <label class="q-l">Ciclo menstrual e gestação</label>
       <div class="opts row" style="margin-bottom:8px">
@@ -312,26 +342,17 @@ textarea{resize:vertical;min-height:58px}
         <label class="opt"><input type="radio" name="gestacao" value="Gestante/amamentando/planejando" onchange="condGestante()"> Gestante/amamentando/planejando</label>
       </div>
       <input type="text" name="gestante_obs" id="gestante_obs" placeholder="Em qual fase?" style="display:none;margin-bottom:8px">
-      <label class="q-l">Alteração menstrual, de libido ou sexualidade após as medicações?</label>
+      <label class="q-l" style="font-weight:400">Houve alteração menstrual após início/ajuste das medicações?</label>
       <div class="opts row">
-        <label class="opt"><input type="radio" name="sexual_f" value="Não" onchange="condSexF()"> Não</label>
-        <label class="opt"><input type="radio" name="sexual_f" value="Sim" onchange="condSexF()"> Sim</label>
+        <label class="opt"><input type="radio" name="menstrual" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="menstrual" value="Sim"> Sim</label>
       </div>
-      <textarea name="sexual_f_desc" id="sexual_f_desc" placeholder="Descreva, se se sentir confortável" style="margin-top:8px;display:none"></textarea>
-    </div>
-    <div class="q" id="bloco_homem" style="display:none">
-      <label class="q-l">Alteração de libido ou função sexual após as medicações?</label>
-      <div class="opts row">
-        <label class="opt"><input type="radio" name="sexual_m" value="Não" onchange="condSexM()"> Não</label>
-        <label class="opt"><input type="radio" name="sexual_m" value="Sim" onchange="condSexM()"> Sim</label>
-      </div>
-      <textarea name="sexual_m_desc" id="sexual_m_desc" placeholder="Descreva, se se sentir confortável" style="margin-top:8px;display:none"></textarea>
     </div>
   </div>
 
   <!-- 11 FECHAMENTO -->
   <div class="sec">
-    <h2><span class="n">11</span> Para fechar</h2>
+    <h2><span class="n">12</span> Para fechar</h2>
     <div class="q"><label class="q-l">Como avalia sua saúde mental hoje? (0 = muito ruim · 10 = muito boa)</label><div class="scale-row"><input type="range" name="esc_global" min="0" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><span class="scale-val">5</span></div></div>
     <div class="q"><label class="q-l">Quanto os sintomas atrapalham seu dia a dia (trabalho, casa, relações)?</label>
       <div class="opts row">
@@ -410,8 +431,7 @@ function condApetite(){ const e=document.querySelector('input[name="apetite"]:ch
 function condSubst(){ document.getElementById('substancias_freq').style.display=grupoTemAlgo('substancias','Nenhuma')?'block':'none'; }
 function condInterc(){ cond('intercorrencia','Sim','saude_obs'); }
 function condGestante(){ cond('gestacao','Gestante/amamentando/planejando','gestante_obs'); }
-function condSexF(){ cond('sexual_f','Sim','sexual_f_desc'); }
-function condSexM(){ cond('sexual_m','Sim','sexual_m_desc'); }
+function condSexual(){ cond('sexual','Sim','sexual_desc'); }
 function condPrejuizo(){ const e=document.querySelector('input[name="prejuizo"]:checked'); document.getElementById('prejuizo_obs').style.display=(e && /Muito|faltar/i.test(e.value))?'block':'none'; }
 function condPraticas(){ document.getElementById('praticas_obs').style.display=grupoTemAlgo('praticas','Nada disso')?'block':'none'; }
 function condRisco(){
@@ -424,7 +444,6 @@ function condRisco(){
 function toggleSexo(){
   const v=(document.querySelector('input[name="sexo"]:checked')||{}).value;
   document.getElementById('bloco_mulher').style.display=(v==='Feminino')?'block':'none';
-  document.getElementById('bloco_homem').style.display=(v==='Masculino')?'block':'none';
 }
 
 const SKEY='retorno_camila_v2';
@@ -436,8 +455,28 @@ function salvar(){
   });
   try{ localStorage.setItem(SKEY,JSON.stringify(d)); }catch(e){}
 }
+function restaurar(){
+  let d; try{ d=JSON.parse(localStorage.getItem(SKEY)||'{}'); }catch(e){ return; }
+  if(!d||!Object.keys(d).length) return;
+  form.querySelectorAll('input,textarea,select').forEach(el=>{
+    if(el.type==='checkbox'||el.type==='radio'){
+      const chave=(el.name||'')+'__'+el.value;
+      if(d[chave]!==undefined){ el.checked=true; el.dispatchEvent(new Event('change',{bubbles:true})); }
+    } else if(el.name && d[el.name]!==undefined){
+      el.value=d[el.name];
+      if(el.type==='range'){ const v=el.parentElement.querySelector('.scale-val'); if(v) v.textContent=el.value; }
+    }
+  });
+  // reaplica todas as condicionais e o destaque visual
+  ['toggleSexo','condAdesao','condEA','condAtivacao','condToc','condApetite','condSubst','condInterc','condGestante','condSexual','condPrejuizo','condPraticas','condRisco','condAtencaoMed'].forEach(fn=>{ try{ window[fn](); }catch(e){} });
+  const osc=document.querySelector('input[value="Oscilando muito"]'); if(osc&&osc.checked) condOscila(osc);
+  document.querySelectorAll('.opt input:checked').forEach(i=>i.closest('.opt').classList.add('checked'));
+  atualizaProg();
+}
 form.addEventListener('input',()=>{salvar();atualizaProg();});
 form.addEventListener('change',()=>{salvar();atualizaProg();});
+// restaura respostas salvas (se a net caiu ou o paciente fechou sem enviar)
+window.addEventListener('load',restaurar);
 
 function coletar(){
   const dados={};
@@ -453,7 +492,7 @@ function coletar(){
 }
 
 const ROTULOS={
-  nome:'Nome',nascimento:'Nascimento',data_consulta:'Próxima consulta',sexo:'Sexo',email_paciente:'E-mail paciente',
+  nome:'Nome',nascimento:'Nascimento',data_consulta:'Próxima consulta',sexo:'Sexo biológico',genero:'Identidade de gênero',orientacao:'Orientação sexual',email_paciente:'E-mail paciente',
   motivo:'Motivo do retorno',evolucao:'Evolução',evento:'Evento estressor',evento_obs:'Qual evento',
   medicacoes:'Medicações em uso',adesao:'Adesão',adesao_obs:'Obs. adesão',ea:'Efeitos adversos',ea_sintomas:'Sintomas adversos',ea_desc:'Descrição EA',
   humor:'Humor',oscila_desc:'Oscilação',esc_tristeza:'Tristeza (0-10)',esc_ansiedade:'Ansiedade (0-10)',anedonia:'Anedonia',
@@ -463,7 +502,7 @@ const ROTULOS={
   toc:'Pensamentos/percepção',toc_desc:'Descrição',
   risco_ideacao:'⚠ Ideação',risco_plano:'⚠ Plano/autoagressão',risco_situacao:'⚠ Situação de risco',risco_desc:'⚠ Detalhe',
   apetite:'Apetite/peso',apetite_obs:'Obs. apetite',substancias:'Substâncias',substancias_freq:'Freq./quantidade',intercorrencia:'Intercorrência',saude_obs:'Detalhe intercorrência',exames:'Exames',psicoterapia:'Psicoterapia',
-  gestacao:'Gestação',gestante_obs:'Fase gestação',sexual_f:'Alteração menstrual/sexual',sexual_f_desc:'Descrição',sexual_m:'Alteração sexual',sexual_m_desc:'Descrição',
+  gestacao:'Gestação',gestante_obs:'Fase gestação',menstrual:'Alteração menstrual',sexual:'Alteração libido/sexual',sexual_desc:'Descrição libido/sexual',
   esc_global:'Saúde mental (0-10)',prejuizo:'Prejuízo funcional',prejuizo_obs:'Obs. prejuízo',percep_tratamento:'Percepção do tratamento',praticas:'Demandas práticas',praticas_obs:'Detalhe práticas',extra:'Observações extras'
 };
 const ORDEM=Object.keys(ROTULOS);

@@ -72,7 +72,7 @@ textarea{resize:vertical;min-height:62px}
         <label class="opt"><input type="radio" name="quem" value="Familiar ou responsável"> Familiar ou responsável</label>
       </div>
     </div>
-    <div class="q"><label class="q-l">E-mail (opcional, caso queira receber uma cópia)</label><input type="email" name="email_paciente"></div>
+    <div class="q"><label class="q-l">Seu e-mail (caso queira receber uma cópia das suas respostas)</label><input type="email" name="email_paciente" placeholder="seunome@email.com"></div>
   </div>
 
   <!-- 2 MOTIVO E EVOLUÇÃO -->
@@ -109,7 +109,20 @@ textarea{resize:vertical;min-height:62px}
         <label class="opt"><input type="radio" name="receita" value="Não"> Não</label>
         <label class="opt"><input type="radio" name="receita" value="Sim"> Sim</label>
       </div>
-      <input type="text" name="receita_quais" placeholder="Quais receitas?" style="margin-top:8px">
+      <input type="text" name="receita_quais" placeholder="Quais medicações?" style="margin-top:8px">
+    </div>
+    <div class="q"><label class="q-l">Precisa de atestado do dia da consulta?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="atestado" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="atestado" value="Sim"> Sim</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Precisa de outros documentos? (relatório, laudo, declaração, etc.)</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="documentos" value="Não" onclick="toggleDoc(false)"> Não</label>
+        <label class="opt"><input type="radio" name="documentos" value="Sim" onclick="toggleDoc(true)"> Sim</label>
+      </div>
+      <input type="text" name="documentos_quais" id="documentos_quais" placeholder="Quais documentos?" style="margin-top:8px;display:none">
     </div>
   </div>
 
@@ -302,12 +315,15 @@ textarea{resize:vertical;min-height:62px}
       <div class="opts row" data-check="substancias">
         <label class="opt"><input type="checkbox" value="Álcool"> Álcool</label>
         <label class="opt"><input type="checkbox" value="Cigarro/vape"> Cigarro/vape</label>
+        <label class="opt"><input type="checkbox" value="Narguilé" onchange="toggleNarguile(this)"> Narguilé</label>
         <label class="opt"><input type="checkbox" value="Cannabis"> Cannabis</label>
         <label class="opt"><input type="checkbox" value="Estimulantes"> Estimulantes</label>
         <label class="opt"><input type="checkbox" value="Medicação sem prescrição"> Medic. sem prescrição</label>
         <label class="opt"><input type="checkbox" value="Nenhuma"> Nenhuma</label>
       </div>
+      <input type="text" name="narguile_rosh" id="narguile_rosh" placeholder="Narguilé: quantos rosh por dia ou por período?" style="margin-top:8px;display:none">
     </div>
+    <div class="q"><label class="q-l">Frequência e quantidade aproximada das substâncias marcadas</label><input type="text" name="substancias_freq"></div>
     <div class="q"><label class="q-l">Intercorrência de saúde (doença, queda, internação, urgência) ou nova consulta/diagnóstico com outro profissional?</label><textarea name="saude_obs"></textarea></div>
     <div class="q"><label class="q-l">Exames solicitados</label>
       <div class="opts row">
@@ -368,7 +384,7 @@ textarea{resize:vertical;min-height:62px}
 
 <script>
 // ===== CONFIG: cole aqui a URL do seu Apps Script (termina em /exec) =====
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDUAn4N5gYX1vb7aRzFjcPBKZhFYg90vuX-HIE8Q4LpLutuLHHYw1kEYES2n0OVbJBuQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgG6eXaQ0ZzBkjFnzQj19qvZ1TJpfWFdHDVQDPI8-ygWh8XLl-oewg9SKZ78dHqNPN/exec';
 const EMAIL_MEDICA = 'dracamilalinopsiq@gmail.com';
 // ========================================================================
 
@@ -416,7 +432,7 @@ function coletar(){
 const ROTULOS={
   nome:'Nome',nascimento:'Nascimento',data_consulta:'Próxima consulta',quem:'Respondido por',email_paciente:'E-mail paciente',
   motivo:'Motivo do retorno',evolucao:'Evolução geral',evento:'Evento/estressor',
-  medicacoes:'Medicações em uso',adesao:'Adesão',adesao_obs:'Obs. adesão',outros_med:'Outras substâncias',receita:'Renovação de receita',receita_quais:'Quais receitas',
+  medicacoes:'Medicações em uso',adesao:'Adesão',adesao_obs:'Obs. adesão',outros_med:'Outras substâncias',receita:'Renovação de receita',receita_quais:'Quais medicações',atestado:'Atestado do dia',documentos:'Outros documentos',documentos_quais:'Quais documentos',
   ea:'Efeitos adversos',ea_sintomas:'Sintomas adversos',ea_desc:'Descrição EA',
   humor:'Humor predominante',esc_tristeza:'Tristeza (0-10)',esc_ansiedade:'Ansiedade (0-10)',esc_irrit:'Irritabilidade (0-10)',anedonia:'Anedonia',
   ativacao:'Sintomas de ativação',ativacao_obs:'Obs. ativação',
@@ -424,10 +440,13 @@ const ROTULOS={
   atencao:'Atenção vs última consulta',atencao_obs:'Obs. atenção',
   toc:'Pensamentos/percepção',toc_desc:'Descrição',
   risco_ideacao:'⚠ Ideação',risco_plano:'⚠ Planejamento',risco_auto:'⚠ Autoagressão/tentativa',risco_situacao:'⚠ Situação de risco',
-  apetite:'Apetite/peso',alimentar:'Comp. alimentar',substancias:'Substâncias',saude_obs:'Intercorrências/saúde',exames:'Exames',psicoterapia:'Psicoterapia',gineco:'Gineco/gestação',
+  apetite:'Apetite/peso',alimentar:'Comp. alimentar',substancias:'Substâncias',narguile_rosh:'Narguilé (rosh)',substancias_freq:'Freq./quantidade substâncias',saude_obs:'Intercorrências/saúde',exames:'Exames',psicoterapia:'Psicoterapia',gineco:'Gineco/gestação',
   esc_global:'Saúde mental (0-10)',esc_prejuizo:'Prejuízo (0-10)',melhorou:'Mais melhorou',atencao_sintoma:'Precisa atenção',prioridades:'Prioridades',extra:'Observações extras'
 };
 const ORDEM=Object.keys(ROTULOS);
+
+function toggleDoc(show){ document.getElementById('documentos_quais').style.display=show?'block':'none'; }
+function toggleNarguile(cb){ document.getElementById('narguile_rosh').style.display=cb.checked?'block':'none'; }
 
 function montarTexto(d){
   const L=[];
@@ -476,6 +495,87 @@ function gerarPDF(d){
   return doc;
 }
 
+// ===== RESUMO PSIQUIÁTRICO DE TRIAGEM =====
+// Classifica a urgência e lista os pontos a abordar na consulta.
+function resumoTriagem(d){
+  const num = k => { const v=parseInt(d[k]); return isNaN(v)?0:v; };
+  const tem = (k,re) => d[k] && re.test(d[k]);
+  const pontos=[];           // tópicos a abordar
+  const urgentes=[];         // bandeiras vermelhas
+
+  // ---- RISCO (sempre prioridade máxima) ----
+  if(d.risco_plano==='Sim' || d.risco_auto==='Sim' || tem('risco_ideacao',/frequentes/i) || d.risco_situacao==='Sim'){
+    urgentes.push('Risco: '+[
+      tem('risco_ideacao',/frequentes/i)?'ideação frequente':'',
+      d.risco_plano==='Sim'?'planejamento':'',
+      d.risco_auto==='Sim'?'autoagressão/tentativa':'',
+      d.risco_situacao==='Sim'?'situação de risco atual':''
+    ].filter(Boolean).join(', '));
+  } else if(tem('risco_ideacao',/passageiros/i) || /conversar/i.test(d.risco_ideacao||'') || /conversar/i.test(d.risco_plano||'')){
+    pontos.push('Investigar ideação (passageira ou “prefere conversar”)');
+  }
+
+  // ---- Ativação / hipomania ----
+  if(d.ativacao && !/Nenhum/i.test(d.ativacao) && d.ativacao.trim()){
+    const grave=/risco|gastos|euforia|sono muito reduzido/i.test(d.ativacao);
+    (grave?urgentes:pontos).push('Sintomas de ativação/(hipo)mania: '+d.ativacao);
+  }
+
+  // ---- Humor ----
+  if(num('esc_tristeza')>=7) urgentes.push('Tristeza intensa ('+d.esc_tristeza+'/10)');
+  else if(num('esc_tristeza')>=4) pontos.push('Tristeza moderada ('+d.esc_tristeza+'/10)');
+  if(num('esc_ansiedade')>=7) urgentes.push('Ansiedade intensa ('+d.esc_ansiedade+'/10)');
+  else if(num('esc_ansiedade')>=4) pontos.push('Ansiedade moderada ('+d.esc_ansiedade+'/10)');
+  if(num('esc_irrit')>=7) pontos.push('Irritabilidade alta ('+d.esc_irrit+'/10)');
+  if(tem('anedonia',/Intensa/i)) urgentes.push('Anedonia intensa');
+
+  // ---- Evolução / piora ----
+  if(tem('evolucao',/Muito pior/i)) urgentes.push('Refere piora importante');
+  else if(tem('evolucao',/pior/i)) pontos.push('Refere piora');
+
+  // ---- Adesão e efeitos adversos ----
+  if(tem('adesao',/Não|interrompi/i)) pontos.push('Adesão comprometida — revisar');
+  if(d.ea==='Sim') pontos.push('Efeitos adversos relatados'+(d.ea_desc?': '+d.ea_desc.slice(0,80):''));
+
+  // ---- Percepção / TOC ----
+  if(tem('toc',/perceptiv|desconfian/i)) urgentes.push('Alterações perceptivas / desconfiança — investigar');
+  else if(tem('toc',/repetitiv|intrusiv/i)) pontos.push('Pensamentos/comportamentos repetitivos');
+
+  // ---- Alimentar / substâncias ----
+  if(d.alimentar==='Sim') pontos.push('Comportamento alimentar a investigar');
+  if(d.substancias && !/Nenhuma/i.test(d.substancias)) pontos.push('Uso de substâncias: '+d.substancias);
+
+  // ---- Sono ----
+  if(tem('sono',/Sonolência diurna|Ronco/i)) pontos.push('Queixa de sono relevante');
+
+  // ---- Prejuízo global ----
+  if(num('esc_prejuizo')>=7) urgentes.push('Prejuízo funcional alto ('+d.esc_prejuizo+'/10)');
+
+  // ---- Demandas práticas ----
+  const prat=[];
+  if(d.receita==='Sim') prat.push('renovar receita'+(d.receita_quais?' ('+d.receita_quais+')':''));
+  if(d.atestado==='Sim') prat.push('atestado do dia');
+  if(d.documentos==='Sim') prat.push('documentos'+(d.documentos_quais?' ('+d.documentos_quais+')':''));
+  if(d.exames && /Realizei/i.test(d.exames)) prat.push('avaliar exames');
+
+  // ---- Classificação ----
+  let nivel, cor;
+  if(urgentes.length){ nivel='URGENTE'; cor='#B03A3A'; }
+  else if(pontos.length>=2){ nivel='MÉDIO'; cor='#C77D00'; }
+  else { nivel='RASTREIO / ROTINA'; cor='#2E7D4F'; }
+
+  // ---- Monta texto ----
+  const L=[];
+  L.push('RESUMO PSIQUIÁTRICO — NÍVEL: '+nivel);
+  L.push('Paciente: '+d.nome);
+  if(d.prioridades) L.push('Prioridades do paciente: '+d.prioridades);
+  if(urgentes.length){ L.push(''); L.push('🔴 PONTOS URGENTES:'); urgentes.forEach(p=>L.push('  • '+p)); }
+  if(pontos.length){ L.push(''); L.push('🟡 A ABORDAR:'); pontos.forEach(p=>L.push('  • '+p)); }
+  if(prat.length){ L.push(''); L.push('📋 DEMANDAS PRÁTICAS: '+prat.join('; ')); }
+  if(d.motivo){ L.push(''); L.push('Motivo declarado: '+d.motivo); }
+  return {nivel, cor, texto:L.join('\n')};
+}
+
 function enviar(){
   const d=coletar();
   const status=document.getElementById('status');
@@ -483,10 +583,14 @@ function enviar(){
   if(!d.nome){ status.style.color='#B03A3A'; status.textContent='Por favor, preencha ao menos o nome.'; return; }
   btn.disabled=true; status.style.color='#6B3FA0'; status.textContent='Enviando...';
 
+  const triagem=resumoTriagem(d);
   const payload={
     nome: d.nome,
+    email_paciente: d.email_paciente || '',
     corpo: montarTexto(d),
-    flagRisco: flagRisco(d)
+    flagRisco: flagRisco(d),
+    nivel: triagem.nivel,
+    resumo: triagem.texto
   };
 
   // POST com text/plain evita o bloqueio de CORS (preflight) do Apps Script

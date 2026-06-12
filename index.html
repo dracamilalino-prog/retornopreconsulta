@@ -73,6 +73,39 @@ textarea{resize:vertical;min-height:62px}
       </div>
     </div>
     <div class="q"><label class="q-l">Seu e-mail (caso queira receber uma cópia das suas respostas)</label><input type="email" name="email_paciente" placeholder="seunome@email.com"></div>
+    <div class="q"><label class="q-l">Sexo biológico</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="sexo" value="Feminino" onclick="toggleGinecoSexo()"> Feminino</label>
+        <label class="opt"><input type="radio" name="sexo" value="Masculino" onclick="toggleGinecoSexo()"> Masculino</label>
+        <label class="opt"><input type="radio" name="sexo" value="Intersexo" onclick="toggleGinecoSexo()"> Intersexo</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Identidade de gênero</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="genero" value="Cisgênero"> Cisgênero</label>
+        <label class="opt"><input type="radio" name="genero" value="Mulher trans"> Mulher trans</label>
+        <label class="opt"><input type="radio" name="genero" value="Homem trans"> Homem trans</label>
+        <label class="opt"><input type="radio" name="genero" value="Não-binário"> Não-binário</label>
+        <label class="opt"><input type="radio" name="genero" value="Outro/prefiro não informar"> Outro / prefiro não informar</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Orientação sexual</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="orientacao" value="Heterossexual"> Heterossexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Homossexual"> Homossexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Bissexual"> Bissexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Assexual"> Assexual</label>
+        <label class="opt"><input type="radio" name="orientacao" value="Outro/prefiro não informar"> Outro / prefiro não informar</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Está em um relacionamento atualmente?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="relacionamento" value="Solteiro(a)"> Solteiro(a)</label>
+        <label class="opt"><input type="radio" name="relacionamento" value="Relacionamento estável"> Relacionamento estável</label>
+        <label class="opt"><input type="radio" name="relacionamento" value="Casado(a)"> Casado(a)</label>
+        <label class="opt"><input type="radio" name="relacionamento" value="Outro"> Outro</label>
+      </div>
+    </div>
   </div>
 
   <!-- 2 MOTIVO E EVOLUÇÃO -->
@@ -106,10 +139,11 @@ textarea{resize:vertical;min-height:62px}
     <div class="q"><label class="q-l">Outros medicamentos, suplementos, fitoterápicos, cannabis ou substâncias</label><textarea name="outros_med"></textarea></div>
     <div class="q"><label class="q-l">Precisa de renovação de receita?</label>
       <div class="opts row">
-        <label class="opt"><input type="radio" name="receita" value="Não"> Não</label>
-        <label class="opt"><input type="radio" name="receita" value="Sim"> Sim</label>
+        <label class="opt"><input type="radio" name="receita" value="Não" onclick="toggleReceita('nao')"> Não</label>
+        <label class="opt"><input type="radio" name="receita" value="Sim, todas" onclick="toggleReceita('todas')"> Sim, todas</label>
+        <label class="opt"><input type="radio" name="receita" value="Sim, apenas algumas" onclick="toggleReceita('algumas')"> Sim, apenas algumas</label>
       </div>
-      <input type="text" name="receita_quais" placeholder="Quais medicações?" style="margin-top:8px">
+      <input type="text" name="receita_quais" id="receita_quais" placeholder="Quais medicações precisam ser renovadas?" style="margin-top:8px;display:none">
     </div>
     <div class="q"><label class="q-l">Precisa de atestado do dia da consulta?</label>
       <div class="opts row">
@@ -167,9 +201,10 @@ textarea{resize:vertical;min-height:62px}
         <label class="opt"><input type="checkbox" value="Triste"> Triste</label>
         <label class="opt"><input type="checkbox" value="Ansioso"> Ansioso</label>
         <label class="opt"><input type="checkbox" value="Irritado"> Irritado</label>
-        <label class="opt"><input type="checkbox" value="Oscilando muito"> Oscilando muito</label>
+        <label class="opt"><input type="checkbox" value="Oscilando muito" onchange="toggleOscila(this)"> Oscilando muito</label>
         <label class="opt"><input type="checkbox" value="Apático/sem emoções"> Apático</label>
       </div>
+      <textarea name="oscila_desc" id="oscila_desc" placeholder="Você marcou 'oscilando muito'. Descreva como é essa oscilação: muda em quanto tempo (no mesmo dia, dias, semanas)? Vai de quê para quê? O que costuma disparar?" style="margin-top:8px;display:none"></textarea>
     </div>
     <div class="q"><label class="q-l">Intensidade média da TRISTEZA (0 a 10)</label>
       <div class="scale-row"><input type="range" name="esc_tristeza" min="0" max="10" value="0" oninput="this.nextElementSibling.textContent=this.value"><span class="scale-val">0</span></div>
@@ -231,7 +266,7 @@ textarea{resize:vertical;min-height:62px}
         <label class="opt"><input type="checkbox" value="Nenhum"> Nenhum</label>
       </div>
     </div>
-    <div class="q"><label class="q-l">Usa algo para dormir? (dose e horário)</label><input type="text" name="sono_med"></div>
+    <div class="q"><label class="q-l">Além dos medicamentos já citados acima, usa mais alguma coisa para dormir? (chá, melatonina, fitoterápico, cannabis, álcool, etc. — com dose/horário)</label><input type="text" name="sono_med" placeholder="Ex: melatonina 3mg, chá de camomila... ou 'nada além do prescrito'"></div>
   </div>
 
   <!-- 8 ATENÇÃO -->
@@ -266,30 +301,34 @@ textarea{resize:vertical;min-height:62px}
     <h2><span class="n">10</span> Segurança</h2>
     <div class="q"><label class="q-l">Desde a última consulta, teve pensamentos de que seria melhor não estar vivo ou de desaparecer?</label>
       <div class="opts">
-        <label class="opt"><input type="radio" name="risco_ideacao" value="Não"> Não</label>
-        <label class="opt"><input type="radio" name="risco_ideacao" value="Pensamentos passageiros"> Pensamentos passageiros</label>
-        <label class="opt"><input type="radio" name="risco_ideacao" value="Pensamentos frequentes"> Pensamentos frequentes</label>
-        <label class="opt"><input type="radio" name="risco_ideacao" value="Prefiro conversar na consulta"> Prefiro conversar na consulta</label>
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Não" onchange="toggleRisco()"> Não</label>
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Pensamentos passageiros" onchange="toggleRisco()"> Pensamentos passageiros</label>
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Pensamentos frequentes" onchange="toggleRisco()"> Pensamentos frequentes</label>
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Prefiro conversar na consulta" onchange="toggleRisco()"> Prefiro conversar na consulta</label>
       </div>
     </div>
     <div class="q"><label class="q-l">Chegou a pensar em como faria, planejar ou separar algum meio?</label>
       <div class="opts">
-        <label class="opt"><input type="radio" name="risco_plano" value="Não"> Não</label>
-        <label class="opt"><input type="radio" name="risco_plano" value="Sim"> Sim</label>
-        <label class="opt"><input type="radio" name="risco_plano" value="Prefiro conversar na consulta"> Prefiro conversar na consulta</label>
+        <label class="opt"><input type="radio" name="risco_plano" value="Não" onchange="toggleRisco()"> Não</label>
+        <label class="opt"><input type="radio" name="risco_plano" value="Sim" onchange="toggleRisco()"> Sim</label>
+        <label class="opt"><input type="radio" name="risco_plano" value="Prefiro conversar na consulta" onchange="toggleRisco()"> Prefiro conversar na consulta</label>
       </div>
     </div>
     <div class="q"><label class="q-l">Teve autoagressão ou tentativa desde a última consulta?</label>
       <div class="opts row">
-        <label class="opt"><input type="radio" name="risco_auto" value="Não"> Não</label>
-        <label class="opt"><input type="radio" name="risco_auto" value="Sim"> Sim</label>
+        <label class="opt"><input type="radio" name="risco_auto" value="Não" onchange="toggleRisco()"> Não</label>
+        <label class="opt"><input type="radio" name="risco_auto" value="Sim" onchange="toggleRisco()"> Sim</label>
       </div>
     </div>
     <div class="q"><label class="q-l">Existe alguma situação atual que te faça sentir em risco ou sem segurança?</label>
       <div class="opts row">
-        <label class="opt"><input type="radio" name="risco_situacao" value="Não"> Não</label>
-        <label class="opt"><input type="radio" name="risco_situacao" value="Sim"> Sim</label>
+        <label class="opt"><input type="radio" name="risco_situacao" value="Não" onchange="toggleRisco()"> Não</label>
+        <label class="opt"><input type="radio" name="risco_situacao" value="Sim" onchange="toggleRisco()"> Sim</label>
       </div>
+    </div>
+    <div class="q" id="risco_desc_wrap" style="display:none">
+      <label class="q-l">Você assinalou algum item acima. Se se sentir confortável, conte um pouco mais: <b>como</b> têm sido esses pensamentos ou situações, <b>quando</b> aconteceram e qual a <b>intensidade</b>. (Você não é obrigado a detalhar — pode preferir conversar na consulta.)</label>
+      <textarea name="risco_desc" placeholder="Como? Quando? Intensidade?"></textarea>
     </div>
     <div class="alerta">⚠️ Em caso de risco atual ou imediato, não aguarde a consulta. Procure uma UPA, pronto-socorro ou serviço de urgência e permaneça acompanhado por uma pessoa de confiança. CVV: 188 (ligação gratuita, 24h).</div>
   </div>
@@ -340,7 +379,44 @@ textarea{resize:vertical;min-height:62px}
         <label class="opt"><input type="radio" name="psicoterapia" value="Não"> Não</label>
       </div>
     </div>
-    <div class="q"><label class="q-l">Esta seção sobre ciclo menstrual/gestação se aplica a você? Se sim, há possibilidade de gestação, amamentação ou alteração menstrual/libido após as medicações?</label><textarea name="gineco" placeholder="Responda apenas se aplicável"></textarea></div>
+    <!-- Mulher: ciclo, gestação, libido/sexualidade -->
+    <div class="q" id="bloco_mulher" style="display:none">
+      <label class="q-l">Ciclo menstrual, gestação e saúde sexual</label>
+      <div style="margin-top:6px">
+        <label class="q-l" style="font-weight:400">Há possibilidade de gestação, amamentação ou planejamento de engravidar?</label>
+        <div class="opts row">
+          <label class="opt"><input type="radio" name="gestacao" value="Não"> Não</label>
+          <label class="opt"><input type="radio" name="gestacao" value="Sim"> Sim</label>
+          <label class="opt"><input type="radio" name="gestacao" value="Não sei"> Não sei</label>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label class="q-l" style="font-weight:400">Houve alteração menstrual após início/ajuste das medicações?</label>
+        <div class="opts row">
+          <label class="opt"><input type="radio" name="menstrual" value="Não"> Não</label>
+          <label class="opt"><input type="radio" name="menstrual" value="Sim"> Sim</label>
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label class="q-l" style="font-weight:400">Percebeu alteração de libido ou sexualidade?</label>
+        <div class="opts row">
+          <label class="opt"><input type="radio" name="libido_f" value="Não" onchange="toggleLibidoF()"> Não</label>
+          <label class="opt"><input type="radio" name="libido_f" value="Sim" onchange="toggleLibidoF()"> Sim</label>
+        </div>
+        <textarea name="libido_f_desc" id="libido_f_desc" placeholder="Descreva, se se sentir confortável" style="margin-top:8px;display:none"></textarea>
+      </div>
+    </div>
+
+    <!-- Homem: libido/sexo -->
+    <div class="q" id="bloco_homem" style="display:none">
+      <label class="q-l">Saúde sexual</label>
+      <label class="q-l" style="font-weight:400;margin-top:6px">Percebeu alteração de libido ou função sexual após as medicações?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="libido_m" value="Não" onchange="toggleLibidoM()"> Não</label>
+        <label class="opt"><input type="radio" name="libido_m" value="Sim" onchange="toggleLibidoM()"> Sim</label>
+      </div>
+      <textarea name="libido_m_desc" id="libido_m_desc" placeholder="Descreva, se se sentir confortável" style="margin-top:8px;display:none"></textarea>
+    </div>
   </div>
 
   <!-- 12 AVALIAÇÃO GLOBAL -->
@@ -430,23 +506,41 @@ function coletar(){
 }
 
 const ROTULOS={
-  nome:'Nome',nascimento:'Nascimento',data_consulta:'Próxima consulta',quem:'Respondido por',email_paciente:'E-mail paciente',
+  nome:'Nome',nascimento:'Nascimento',data_consulta:'Próxima consulta',quem:'Respondido por',email_paciente:'E-mail paciente',sexo:'Sexo biológico',genero:'Identidade de gênero',orientacao:'Orientação sexual',relacionamento:'Relacionamento',
   motivo:'Motivo do retorno',evolucao:'Evolução geral',evento:'Evento/estressor',
   medicacoes:'Medicações em uso',adesao:'Adesão',adesao_obs:'Obs. adesão',outros_med:'Outras substâncias',receita:'Renovação de receita',receita_quais:'Quais medicações',atestado:'Atestado do dia',documentos:'Outros documentos',documentos_quais:'Quais documentos',
   ea:'Efeitos adversos',ea_sintomas:'Sintomas adversos',ea_desc:'Descrição EA',
-  humor:'Humor predominante',esc_tristeza:'Tristeza (0-10)',esc_ansiedade:'Ansiedade (0-10)',esc_irrit:'Irritabilidade (0-10)',anedonia:'Anedonia',
+  humor:'Humor predominante',oscila_desc:'Descrição da oscilação',esc_tristeza:'Tristeza (0-10)',esc_ansiedade:'Ansiedade (0-10)',esc_irrit:'Irritabilidade (0-10)',anedonia:'Anedonia',
   ativacao:'Sintomas de ativação',ativacao_obs:'Obs. ativação',
-  sono_horas:'Horas de sono',sono_qualidade:'Qualidade do sono',sono:'Padrão de sono',sono_med:'Medicação p/ dormir',
+  sono_horas:'Horas de sono',sono_qualidade:'Qualidade do sono',sono:'Padrão de sono',sono_med:'Outros recursos p/ dormir',
   atencao:'Atenção vs última consulta',atencao_obs:'Obs. atenção',
   toc:'Pensamentos/percepção',toc_desc:'Descrição',
-  risco_ideacao:'⚠ Ideação',risco_plano:'⚠ Planejamento',risco_auto:'⚠ Autoagressão/tentativa',risco_situacao:'⚠ Situação de risco',
-  apetite:'Apetite/peso',alimentar:'Comp. alimentar',substancias:'Substâncias',narguile_rosh:'Narguilé (rosh)',substancias_freq:'Freq./quantidade substâncias',saude_obs:'Intercorrências/saúde',exames:'Exames',psicoterapia:'Psicoterapia',gineco:'Gineco/gestação',
+  risco_ideacao:'⚠ Ideação',risco_plano:'⚠ Planejamento',risco_auto:'⚠ Autoagressão/tentativa',risco_situacao:'⚠ Situação de risco',risco_desc:'⚠ Detalhamento (como/quando/intensidade)',
+  apetite:'Apetite/peso',alimentar:'Comp. alimentar',substancias:'Substâncias',narguile_rosh:'Narguilé (rosh)',substancias_freq:'Freq./quantidade substâncias',saude_obs:'Intercorrências/saúde',exames:'Exames',psicoterapia:'Psicoterapia',
+  gestacao:'Possibilidade de gestação',menstrual:'Alteração menstrual',libido_f:'Alteração libido/sexualidade',libido_f_desc:'Descrição libido/sexualidade',libido_m:'Alteração libido/função sexual',libido_m_desc:'Descrição libido/sexual',
   esc_global:'Saúde mental (0-10)',esc_prejuizo:'Prejuízo (0-10)',melhorou:'Mais melhorou',atencao_sintoma:'Precisa atenção',prioridades:'Prioridades',extra:'Observações extras'
 };
 const ORDEM=Object.keys(ROTULOS);
 
 function toggleDoc(show){ document.getElementById('documentos_quais').style.display=show?'block':'none'; }
 function toggleNarguile(cb){ document.getElementById('narguile_rosh').style.display=cb.checked?'block':'none'; }
+function toggleReceita(v){ document.getElementById('receita_quais').style.display=(v==='algumas')?'block':'none'; }
+function toggleOscila(cb){ document.getElementById('oscila_desc').style.display=cb.checked?'block':'none'; }
+function toggleRisco(){
+  const marcouSim = ['risco_ideacao','risco_plano','risco_auto','risco_situacao'].some(n=>{
+    const el=document.querySelector('input[name="'+n+'"]:checked');
+    return el && /Sim|frequentes|passageiros/i.test(el.value);
+  });
+  document.getElementById('risco_desc_wrap').style.display = marcouSim?'block':'none';
+}
+function toggleGinecoSexo(){
+  const sexo=document.querySelector('input[name="sexo"]:checked');
+  const v=sexo?sexo.value:'';
+  document.getElementById('bloco_mulher').style.display=(v==='Feminino')?'block':'none';
+  document.getElementById('bloco_homem').style.display=(v==='Masculino')?'block':'none';
+}
+function toggleLibidoF(){ const e=document.querySelector('input[name="libido_f"]:checked'); document.getElementById('libido_f_desc').style.display=(e&&e.value==='Sim')?'block':'none'; }
+function toggleLibidoM(){ const e=document.querySelector('input[name="libido_m"]:checked'); document.getElementById('libido_m_desc').style.display=(e&&e.value==='Sim')?'block':'none'; }
 
 function montarTexto(d){
   const L=[];
@@ -553,7 +647,7 @@ function resumoTriagem(d){
 
   // ---- Demandas práticas ----
   const prat=[];
-  if(d.receita==='Sim') prat.push('renovar receita'+(d.receita_quais?' ('+d.receita_quais+')':''));
+  if(d.receita && /Sim/i.test(d.receita)) prat.push('renovar receita ('+d.receita+(d.receita_quais?': '+d.receita_quais:'')+')');
   if(d.atestado==='Sim') prat.push('atestado do dia');
   if(d.documentos==='Sim') prat.push('documentos'+(d.documentos_quais?' ('+d.documentos_quais+')':''));
   if(d.exames && /Realizei/i.test(d.exames)) prat.push('avaliar exames');

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionário Pré-Consulta de Retorno · Dra. Camila Lino</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--lilas:#EBADFF;--roxo:#6B3FA0;--roxo2:#4B1A6E;--cream:#FBF7FF;--text:#2A1840;--muted:#8B7BA0;--border:#E6D9F2;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--cream);color:var(--text);line-height:1.5;padding-bottom:40px}
+.head{background:linear-gradient(135deg,var(--roxo2),var(--roxo));color:#fff;padding:28px 20px;text-align:center}
+.head .logo{width:54px;height:54px;border-radius:50%;border:2px solid var(--lilas);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:20px;font-weight:bold;color:var(--lilas);font-style:italic}
+.head h1{font-size:1.25rem;font-weight:600}
+.head .sub{font-size:.8rem;opacity:.85;margin-top:4px;letter-spacing:1px}
+.wrap{max-width:680px;margin:0 auto;padding:18px 14px}
+.intro{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;font-size:.9rem;color:var(--muted);margin-bottom:18px}
+.sec{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
+.sec h2{font-size:.78rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--roxo);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec h2 .n{background:var(--lilas);color:var(--roxo2);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0}
+.q{margin-bottom:16px}.q:last-child{margin-bottom:0}
+label.q-l{display:block;font-size:.9rem;font-weight:500;margin-bottom:7px}
+input[type=text],input[type=date],input[type=email],input[type=number],textarea,select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:.95rem;font-family:inherit;color:var(--text);background:var(--cream)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--roxo)}
+textarea{resize:vertical;min-height:62px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opts.row{flex-direction:row;flex-wrap:wrap}
+.opt{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:.9rem;background:var(--cream)}
+.opt:hover{border-color:var(--lilas)}
+.opt input{width:auto;margin:0;accent-color:var(--roxo)}
+.opt.checked{border-color:var(--roxo);background:#F6EDFF}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.scale-row{display:flex;align-items:center;gap:10px}
+.scale-row input[type=range]{flex:1;accent-color:var(--roxo)}
+.scale-val{font-weight:bold;color:var(--roxo);min-width:42px;text-align:center;font-size:1.1rem}
+.risco{border:2px solid #E5A0A0;background:#FFF5F5}
+.risco h2{color:#B03A3A}.risco h2 .n{background:#E5A0A0;color:#7A1F1F}
+.alerta{background:#FFE8E8;border:1px solid #E5A0A0;border-radius:9px;padding:12px;font-size:.85rem;color:#8A2020;margin-top:12px;font-weight:500}
+.btn{width:100%;padding:16px;border:none;border-radius:11px;background:linear-gradient(135deg,var(--roxo),var(--roxo2));color:#fff;font-size:1.05rem;font-weight:600;cursor:pointer;margin-top:8px;font-family:inherit}
+.btn:disabled{opacity:.6}
+.status{text-align:center;margin-top:14px;font-size:.92rem;font-weight:500;min-height:22px}
+.foot{text-align:center;font-size:.72rem;color:var(--muted);margin-top:20px;line-height:1.6}
+.hint{font-size:.78rem;color:var(--muted);margin-top:4px}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="logo">CL</div>
+  <h1>Questionário Pré-Consulta de Retorno</h1>
+  <div class="sub">DRA. CAMILA LINO · MÉDICA · CRM-SP 274280</div>
+</div>
+
+<div class="wrap">
+  <div class="intro">
+    Este questionário ajuda a tornar sua consulta de retorno mais completa e objetiva. Responda com calma — suas respostas são enviadas com segurança à sua médica. Leva cerca de 7 minutos. As respostas ficam salvas neste aparelho caso precise pausar.
+  </div>
+
+  <form id="form">
+
+  <!-- 1 IDENTIFICAÇÃO -->
+  <div class="sec">
+    <h2><span class="n">1</span> Identificação</h2>
+    <div class="q"><label class="q-l">Nome completo</label><input type="text" name="nome" required></div>
+    <div class="grid2">
+      <div class="q"><label class="q-l">Data de nascimento</label><input type="date" name="nascimento"></div>
+      <div class="q"><label class="q-l">Data da próxima consulta</label><input type="date" name="data_consulta"></div>
+    </div>
+    <div class="q"><label class="q-l">Quem está respondendo?</label>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="quem" value="O próprio paciente"> O próprio paciente</label>
+        <label class="opt"><input type="radio" name="quem" value="Paciente com auxílio de familiar/responsável"> Paciente com auxílio de familiar/responsável</label>
+        <label class="opt"><input type="radio" name="quem" value="Familiar ou responsável"> Familiar ou responsável</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">E-mail (opcional, caso queira receber uma cópia)</label><input type="email" name="email_paciente"></div>
+  </div>
+
+  <!-- 2 MOTIVO E EVOLUÇÃO -->
+  <div class="sec">
+    <h2><span class="n">2</span> Motivo do retorno e evolução</h2>
+    <div class="q"><label class="q-l">Principal questão que gostaria de abordar nesta consulta</label><textarea name="motivo"></textarea></div>
+    <div class="q"><label class="q-l">Como se sente em comparação à última consulta?</label>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="evolucao" value="Muito melhor"> Muito melhor</label>
+        <label class="opt"><input type="radio" name="evolucao" value="Melhor"> Melhor</label>
+        <label class="opt"><input type="radio" name="evolucao" value="Sem mudanças"> Sem mudanças</label>
+        <label class="opt"><input type="radio" name="evolucao" value="Pior"> Pior</label>
+        <label class="opt"><input type="radio" name="evolucao" value="Muito pior"> Muito pior</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Aconteceu algum evento importante ou situação estressante desde então? Descreva brevemente.</label><textarea name="evento"></textarea></div>
+  </div>
+
+  <!-- 3 MEDICAÇÕES -->
+  <div class="sec">
+    <h2><span class="n">3</span> Medicações em uso</h2>
+    <div class="q"><label class="q-l">Liste as medicações atuais (nome, dose e horário)</label><textarea name="medicacoes" style="min-height:90px"></textarea></div>
+    <div class="q"><label class="q-l">Está tomando conforme orientado?</label>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="adesao" value="Sim, conforme orientado"> Sim, conforme orientado</label>
+        <label class="opt"><input type="radio" name="adesao" value="Parcialmente"> Parcialmente</label>
+        <label class="opt"><input type="radio" name="adesao" value="Não / interrompi"> Não, ou interrompi</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Se houve mudança por conta própria, dificuldade para comprar ou esquecimentos, descreva</label><textarea name="adesao_obs"></textarea></div>
+    <div class="q"><label class="q-l">Outros medicamentos, suplementos, fitoterápicos, cannabis ou substâncias</label><textarea name="outros_med"></textarea></div>
+    <div class="q"><label class="q-l">Precisa de renovação de receita?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="receita" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="receita" value="Sim"> Sim</label>
+      </div>
+      <input type="text" name="receita_quais" placeholder="Quais receitas?" style="margin-top:8px">
+    </div>
+  </div>
+
+  <!-- 4 EFEITOS ADVERSOS -->
+  <div class="sec">
+    <h2><span class="n">4</span> Efeitos adversos</h2>
+    <div class="q"><label class="q-l">Percebeu efeitos adversos das medicações?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="ea" value="Não percebi"> Não percebi</label>
+        <label class="opt"><input type="radio" name="ea" value="Sim"> Sim</label>
+        <label class="opt"><input type="radio" name="ea" value="Não tenho certeza"> Não tenho certeza</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Se sim, marque os sintomas</label>
+      <div class="opts row" data-check="ea_sintomas">
+        <label class="opt"><input type="checkbox" value="Sonolência"> Sonolência</label>
+        <label class="opt"><input type="checkbox" value="Insônia"> Insônia</label>
+        <label class="opt"><input type="checkbox" value="Náusea/GI"> Náusea/desconforto GI</label>
+        <label class="opt"><input type="checkbox" value="Boca seca"> Boca seca</label>
+        <label class="opt"><input type="checkbox" value="Dor de cabeça"> Dor de cabeça</label>
+        <label class="opt"><input type="checkbox" value="Tontura"> Tontura</label>
+        <label class="opt"><input type="checkbox" value="Tremores"> Tremores</label>
+        <label class="opt"><input type="checkbox" value="Palpitações"> Palpitações</label>
+        <label class="opt"><input type="checkbox" value="Inquietação"> Inquietação</label>
+        <label class="opt"><input type="checkbox" value="Aumento de ansiedade"> ↑ Ansiedade</label>
+        <label class="opt"><input type="checkbox" value="Alteração de apetite/peso"> Apetite/peso</label>
+        <label class="opt"><input type="checkbox" value="Libido/sexual"> Libido/sexual</label>
+        <label class="opt"><input type="checkbox" value="Pele"> Pele (coceira/lesões)</label>
+        <label class="opt"><input type="checkbox" value="Memória/confusão"> Memória/confusão</label>
+        <label class="opt"><input type="checkbox" value="Outro"> Outro</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Descreva o efeito: quando começou, intensidade, se ainda está presente</label><textarea name="ea_desc"></textarea></div>
+  </div>
+
+  <!-- 5 HUMOR -->
+  <div class="sec">
+    <h2><span class="n">5</span> Humor</h2>
+    <div class="q"><label class="q-l">Como tem estado seu humor na maior parte do tempo?</label>
+      <div class="opts row" data-check="humor">
+        <label class="opt"><input type="checkbox" value="Bem/estável"> Bem / estável</label>
+        <label class="opt"><input type="checkbox" value="Triste"> Triste</label>
+        <label class="opt"><input type="checkbox" value="Ansioso"> Ansioso</label>
+        <label class="opt"><input type="checkbox" value="Irritado"> Irritado</label>
+        <label class="opt"><input type="checkbox" value="Oscilando muito"> Oscilando muito</label>
+        <label class="opt"><input type="checkbox" value="Apático/sem emoções"> Apático</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Intensidade média da TRISTEZA (0 a 10)</label>
+      <div class="scale-row"><input type="range" name="esc_tristeza" min="0" max="10" value="0" oninput="this.nextElementSibling.textContent=this.value"><span class="scale-val">0</span></div>
+    </div>
+    <div class="q"><label class="q-l">Intensidade média da ANSIEDADE (0 a 10)</label>
+      <div class="scale-row"><input type="range" name="esc_ansiedade" min="0" max="10" value="0" oninput="this.nextElementSibling.textContent=this.value"><span class="scale-val">0</span></div>
+    </div>
+    <div class="q"><label class="q-l">Intensidade média da IRRITABILIDADE (0 a 10)</label>
+      <div class="scale-row"><input type="range" name="esc_irrit" min="0" max="10" value="0" oninput="this.nextElementSibling.textContent=this.value"><span class="scale-val">0</span></div>
+    </div>
+    <div class="q"><label class="q-l">Perda de interesse ou prazer nas coisas</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="anedonia" value="Sem perda"> Sem perda</label>
+        <label class="opt"><input type="radio" name="anedonia" value="Leve"> Leve</label>
+        <label class="opt"><input type="radio" name="anedonia" value="Moderada"> Moderada</label>
+        <label class="opt"><input type="radio" name="anedonia" value="Intensa"> Intensa</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 ATIVAÇÃO / OSCILAÇÃO -->
+  <div class="sec">
+    <h2><span class="n">6</span> Energia e oscilações do humor</h2>
+    <div class="q"><label class="q-l">Teve algum período com estes sintomas? (marque os que se aplicam)</label>
+      <div class="opts row" data-check="ativacao">
+        <label class="opt"><input type="checkbox" value="Energia muito acima do habitual"> Energia muito alta</label>
+        <label class="opt"><input type="checkbox" value="Sono muito reduzido sem cansaço"> Pouco sono sem cansaço</label>
+        <label class="opt"><input type="checkbox" value="Pensamento/fala acelerados"> Pensamento acelerado</label>
+        <label class="opt"><input type="checkbox" value="Euforia"> Euforia</label>
+        <label class="opt"><input type="checkbox" value="Gastos/impulsividade"> Gastos impulsivos</label>
+        <label class="opt"><input type="checkbox" value="Comportamentos de risco"> Comportamentos de risco</label>
+        <label class="opt"><input type="checkbox" value="Nenhum"> Nenhum destes</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Se ocorreu, por quantos dias durou e houve consequências? Outras pessoas notaram?</label><textarea name="ativacao_obs"></textarea></div>
+  </div>
+
+  <!-- 7 SONO -->
+  <div class="sec">
+    <h2><span class="n">7</span> Sono</h2>
+    <div class="grid2">
+      <div class="q"><label class="q-l">Horas que dorme por noite</label><input type="text" name="sono_horas" placeholder="ex: 6h"></div>
+      <div class="q"><label class="q-l">Qualidade ao acordar</label>
+        <select name="sono_qualidade">
+          <option value="">Selecione</option>
+          <option>Acordo descansado</option>
+          <option>Parcialmente descansado</option>
+          <option>Não acordo descansado</option>
+        </select>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Marque o que se aplica ao seu sono</label>
+      <div class="opts row" data-check="sono">
+        <label class="opt"><input type="checkbox" value="Demora para pegar no sono"> Demora p/ dormir</label>
+        <label class="opt"><input type="checkbox" value="Acordo várias vezes"> Acordo à noite</label>
+        <label class="opt"><input type="checkbox" value="Pesadelos/sonhos intensos"> Pesadelos</label>
+        <label class="opt"><input type="checkbox" value="Sonolência diurna"> Sonolência diurna</label>
+        <label class="opt"><input type="checkbox" value="Ronco/pausas respiratórias"> Ronco/apneia</label>
+        <label class="opt"><input type="checkbox" value="Nenhum"> Nenhum</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Usa algo para dormir? (dose e horário)</label><input type="text" name="sono_med"></div>
+  </div>
+
+  <!-- 8 ATENÇÃO -->
+  <div class="sec">
+    <h2><span class="n">8</span> Atenção e organização</h2>
+    <div class="q"><label class="q-l">Comparado à última consulta, sua atenção/organização está:</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="atencao" value="Melhor"> Melhor</label>
+        <label class="opt"><input type="radio" name="atencao" value="Igual"> Igual</label>
+        <label class="opt"><input type="radio" name="atencao" value="Pior"> Pior</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Se usa medicação para atenção: por quantas horas percebe efeito e há rebote (irritabilidade/fome/cansaço) ao fim?</label><textarea name="atencao_obs"></textarea></div>
+  </div>
+
+  <!-- 9 PENSAMENTOS / PERCEPÇÃO -->
+  <div class="sec">
+    <h2><span class="n">9</span> Pensamentos intrusivos e percepção</h2>
+    <div class="q"><label class="q-l">Marque o que se aplica</label>
+      <div class="opts" data-check="toc">
+        <label class="opt"><input type="checkbox" value="Pensamentos repetitivos/intrusivos indesejados"> Pensamentos repetitivos ou intrusivos indesejados</label>
+        <label class="opt"><input type="checkbox" value="Comportamentos repetitivos (conferir, contar, lavar...)"> Comportamentos repetitivos (conferir, contar, lavar...)</label>
+        <label class="opt"><input type="checkbox" value="Alterações perceptivas / desconfiança intensa"> Ouvi/vi coisas que outros não percebiam, ou desconfiança intensa</label>
+        <label class="opt"><input type="checkbox" value="Nenhum"> Nenhum destes</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Descreva qualquer experiência importante</label><textarea name="toc_desc"></textarea></div>
+  </div>
+
+  <!-- 10 RISCO -->
+  <div class="sec risco">
+    <h2><span class="n">10</span> Segurança</h2>
+    <div class="q"><label class="q-l">Desde a última consulta, teve pensamentos de que seria melhor não estar vivo ou de desaparecer?</label>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Pensamentos passageiros"> Pensamentos passageiros</label>
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Pensamentos frequentes"> Pensamentos frequentes</label>
+        <label class="opt"><input type="radio" name="risco_ideacao" value="Prefiro conversar na consulta"> Prefiro conversar na consulta</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Chegou a pensar em como faria, planejar ou separar algum meio?</label>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="risco_plano" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="risco_plano" value="Sim"> Sim</label>
+        <label class="opt"><input type="radio" name="risco_plano" value="Prefiro conversar na consulta"> Prefiro conversar na consulta</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Teve autoagressão ou tentativa desde a última consulta?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="risco_auto" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="risco_auto" value="Sim"> Sim</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Existe alguma situação atual que te faça sentir em risco ou sem segurança?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="risco_situacao" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="risco_situacao" value="Sim"> Sim</label>
+      </div>
+    </div>
+    <div class="alerta">⚠️ Em caso de risco atual ou imediato, não aguarde a consulta. Procure uma UPA, pronto-socorro ou serviço de urgência e permaneça acompanhado por uma pessoa de confiança. CVV: 188 (ligação gratuita, 24h).</div>
+  </div>
+
+  <!-- 11 HÁBITOS E SAÚDE -->
+  <div class="sec">
+    <h2><span class="n">11</span> Hábitos e saúde física</h2>
+    <div class="q"><label class="q-l">Apetite / peso desde a última consulta</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="apetite" value="Sem mudança"> Sem mudança</label>
+        <label class="opt"><input type="radio" name="apetite" value="Aumentado"> Aumentado</label>
+        <label class="opt"><input type="radio" name="apetite" value="Reduzido"> Reduzido</label>
+        <label class="opt"><input type="radio" name="apetite" value="Muito variável"> Muito variável</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Compulsão alimentar, restrição importante ou comportamentos compensatórios (vômito, laxante, jejum, exercício excessivo)?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="alimentar" value="Não"> Não</label>
+        <label class="opt"><input type="radio" name="alimentar" value="Sim"> Sim</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Uso de substâncias (marque o que se aplica)</label>
+      <div class="opts row" data-check="substancias">
+        <label class="opt"><input type="checkbox" value="Álcool"> Álcool</label>
+        <label class="opt"><input type="checkbox" value="Cigarro/vape"> Cigarro/vape</label>
+        <label class="opt"><input type="checkbox" value="Cannabis"> Cannabis</label>
+        <label class="opt"><input type="checkbox" value="Estimulantes"> Estimulantes</label>
+        <label class="opt"><input type="checkbox" value="Medicação sem prescrição"> Medic. sem prescrição</label>
+        <label class="opt"><input type="checkbox" value="Nenhuma"> Nenhuma</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Intercorrência de saúde (doença, queda, internação, urgência) ou nova consulta/diagnóstico com outro profissional?</label><textarea name="saude_obs"></textarea></div>
+    <div class="q"><label class="q-l">Exames solicitados</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="exames" value="Realizei todos"> Realizei todos</label>
+        <label class="opt"><input type="radio" name="exames" value="Parcialmente"> Parcialmente</label>
+        <label class="opt"><input type="radio" name="exames" value="Não realizei"> Não realizei</label>
+        <label class="opt"><input type="radio" name="exames" value="Não foram solicitados"> Não foram solicitados</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Faz psicoterapia?</label>
+      <div class="opts row">
+        <label class="opt"><input type="radio" name="psicoterapia" value="Sim, regularmente"> Sim, regularmente</label>
+        <label class="opt"><input type="radio" name="psicoterapia" value="Irregularmente"> Irregularmente</label>
+        <label class="opt"><input type="radio" name="psicoterapia" value="Não"> Não</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Esta seção sobre ciclo menstrual/gestação se aplica a você? Se sim, há possibilidade de gestação, amamentação ou alteração menstrual/libido após as medicações?</label><textarea name="gineco" placeholder="Responda apenas se aplicável"></textarea></div>
+  </div>
+
+  <!-- 12 AVALIAÇÃO GLOBAL -->
+  <div class="sec">
+    <h2><span class="n">12</span> Avaliação global e prioridades</h2>
+    <div class="q"><label class="q-l">Como avalia sua saúde mental hoje? (0 = muito ruim · 10 = muito boa)</label>
+      <div class="scale-row"><input type="range" name="esc_global" min="0" max="10" value="5" oninput="this.nextElementSibling.textContent=this.value"><span class="scale-val">5</span></div>
+    </div>
+    <div class="q"><label class="q-l">Quanto os sintomas prejudicam sua vida? (0 = nenhum · 10 = extremo)</label>
+      <div class="scale-row"><input type="range" name="esc_prejuizo" min="0" max="10" value="0" oninput="this.nextElementSibling.textContent=this.value"><span class="scale-val">0</span></div>
+    </div>
+    <div class="q"><label class="q-l">Qual sintoma mais melhorou?</label><input type="text" name="melhorou"></div>
+    <div class="q"><label class="q-l">Qual ainda precisa de mais atenção?</label><input type="text" name="atencao_sintoma"></div>
+    <div class="q"><label class="q-l">Prioridades para esta consulta (escolha as principais)</label>
+      <div class="opts row" data-check="prioridades">
+        <label class="opt"><input type="checkbox" value="Ajuste de medicação"> Ajuste de medicação</label>
+        <label class="opt"><input type="checkbox" value="Efeitos adversos"> Efeitos adversos</label>
+        <label class="opt"><input type="checkbox" value="Ansiedade"> Ansiedade</label>
+        <label class="opt"><input type="checkbox" value="Humor/oscilações"> Humor/oscilações</label>
+        <label class="opt"><input type="checkbox" value="Sono"> Sono</label>
+        <label class="opt"><input type="checkbox" value="Atenção"> Atenção</label>
+        <label class="opt"><input type="checkbox" value="Renovação de receitas"> Renovação de receitas</label>
+        <label class="opt"><input type="checkbox" value="Avaliação de exames"> Avaliação de exames</label>
+        <label class="opt"><input type="checkbox" value="Documentos médicos"> Documentos médicos</label>
+        <label class="opt"><input type="checkbox" value="Outro"> Outro</label>
+      </div>
+    </div>
+    <div class="q"><label class="q-l">Há algo importante que não foi perguntado e você gostaria de registrar?</label><textarea name="extra"></textarea></div>
+  </div>
+
+  <button type="button" class="btn" id="btn" onclick="enviar()">Enviar respostas para a Dra. Camila</button>
+  <div class="status" id="status"></div>
+
+  </form>
+
+  <div class="foot">
+    Documento de uso clínico · Dra. Camila Lino · Médica · CRM-SP 274280<br>
+    Suas respostas são confidenciais e enviadas diretamente à sua médica.
+  </div>
+</div>
+
+<script>
+// ===== CONFIG: cole aqui a URL do seu Apps Script (termina em /exec) =====
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxDUAn4N5gYX1vb7aRzFjcPBKZhFYg90vuX-HIE8Q4LpLutuLHHYw1kEYES2n0OVbJBuQ/exec';
+const EMAIL_MEDICA = 'dracamilalinopsiq@gmail.com';
+// ========================================================================
+
+// destaque visual das opções marcadas
+document.querySelectorAll('.opt input').forEach(inp=>{
+  const sync=()=>{
+    if(inp.type==='radio'){
+      document.querySelectorAll('input[name="'+inp.name+'"]').forEach(r=>r.closest('.opt').classList.toggle('checked',r.checked));
+    } else {
+      inp.closest('.opt').classList.toggle('checked',inp.checked);
+    }
+  };
+  inp.addEventListener('change',sync);
+});
+
+// auto-save no aparelho
+const form=document.getElementById('form');
+const SKEY='retorno_camila';
+function salvar(){
+  const d={};
+  form.querySelectorAll('input,textarea,select').forEach(el=>{
+    if(el.type==='checkbox'||el.type==='radio'){ if(el.checked) d[el.name||el.closest('[data-check]')?.dataset.check+'_'+el.value]=el.value; }
+    else if(el.name) d[el.name]=el.value;
+  });
+  try{ localStorage.setItem(SKEY,JSON.stringify(d)); }catch(e){}
+}
+form.addEventListener('input',salvar);
+
+// coleta agrupando checkboxes por data-check
+function coletar(){
+  const dados={};
+  // campos nomeados (radio/text/textarea/select)
+  form.querySelectorAll('input[name],textarea[name],select[name]').forEach(el=>{
+    if(el.type==='radio'){ if(el.checked) dados[el.name]=el.value; }
+    else if(el.type!=='checkbox'){ if(el.value.trim()) dados[el.name]=el.value.trim(); }
+  });
+  // grupos de checkbox
+  document.querySelectorAll('[data-check]').forEach(g=>{
+    const marcados=[...g.querySelectorAll('input:checked')].map(i=>i.value);
+    if(marcados.length) dados[g.dataset.check]=marcados.join(', ');
+  });
+  return dados;
+}
+
+const ROTULOS={
+  nome:'Nome',nascimento:'Nascimento',data_consulta:'Próxima consulta',quem:'Respondido por',email_paciente:'E-mail paciente',
+  motivo:'Motivo do retorno',evolucao:'Evolução geral',evento:'Evento/estressor',
+  medicacoes:'Medicações em uso',adesao:'Adesão',adesao_obs:'Obs. adesão',outros_med:'Outras substâncias',receita:'Renovação de receita',receita_quais:'Quais receitas',
+  ea:'Efeitos adversos',ea_sintomas:'Sintomas adversos',ea_desc:'Descrição EA',
+  humor:'Humor predominante',esc_tristeza:'Tristeza (0-10)',esc_ansiedade:'Ansiedade (0-10)',esc_irrit:'Irritabilidade (0-10)',anedonia:'Anedonia',
+  ativacao:'Sintomas de ativação',ativacao_obs:'Obs. ativação',
+  sono_horas:'Horas de sono',sono_qualidade:'Qualidade do sono',sono:'Padrão de sono',sono_med:'Medicação p/ dormir',
+  atencao:'Atenção vs última consulta',atencao_obs:'Obs. atenção',
+  toc:'Pensamentos/percepção',toc_desc:'Descrição',
+  risco_ideacao:'⚠ Ideação',risco_plano:'⚠ Planejamento',risco_auto:'⚠ Autoagressão/tentativa',risco_situacao:'⚠ Situação de risco',
+  apetite:'Apetite/peso',alimentar:'Comp. alimentar',substancias:'Substâncias',saude_obs:'Intercorrências/saúde',exames:'Exames',psicoterapia:'Psicoterapia',gineco:'Gineco/gestação',
+  esc_global:'Saúde mental (0-10)',esc_prejuizo:'Prejuízo (0-10)',melhorou:'Mais melhorou',atencao_sintoma:'Precisa atenção',prioridades:'Prioridades',extra:'Observações extras'
+};
+const ORDEM=Object.keys(ROTULOS);
+
+function montarTexto(d){
+  const L=[];
+  L.push('QUESTIONÁRIO PRÉ-CONSULTA DE RETORNO');
+  L.push('Dra. Camila Lino · CRM-SP 274280');
+  L.push('Recebido em: '+new Date().toLocaleString('pt-BR'));
+  L.push('========================================');
+  ORDEM.forEach(k=>{ if(d[k]!==undefined && d[k]!=='') L.push(ROTULOS[k]+': '+d[k]); });
+  return L.join('\n');
+}
+
+// alerta de risco para o assunto do e-mail
+function flagRisco(d){
+  const r=[];
+  if(d.risco_ideacao && /frequentes/i.test(d.risco_ideacao)) r.push('IDEAÇÃO FREQUENTE');
+  if(d.risco_plano==='Sim') r.push('PLANEJAMENTO');
+  if(d.risco_auto==='Sim') r.push('AUTOAGRESSÃO/TENTATIVA');
+  if(d.risco_situacao==='Sim') r.push('SITUAÇÃO DE RISCO');
+  return r.length?' [⚠ '+r.join(' · ')+']':'';
+}
+
+function gerarPDF(d){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const ML=14,PW=182;let y=18;
+  // cabeçalho
+  doc.setFillColor(75,26,110);doc.rect(0,0,210,26,'F');
+  doc.setTextColor(255);doc.setFont('helvetica','bold');doc.setFontSize(13);
+  doc.text('Questionário Pré-Consulta de Retorno',ML,12);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  doc.text('Dra. Camila Lino · Médica · CRM-SP 274280',ML,19);
+  y=34;doc.setTextColor(40,24,64);
+  doc.setFontSize(8);doc.text('Recebido em '+new Date().toLocaleString('pt-BR'),ML,y);y+=7;
+  ORDEM.forEach(k=>{
+    if(d[k]===undefined||d[k]==='')return;
+    const risco=k.startsWith('risco_');
+    doc.setFont('helvetica','bold');doc.setFontSize(8.6);
+    doc.setTextColor(risco?176:107, risco?58:63, risco?58:160);
+    const rot=doc.splitTextToSize(ROTULOS[k]+':',PW);
+    rot.forEach(l=>{if(y>282){doc.addPage();y=18;}doc.text(l,ML,y);y+=4.6;});
+    doc.setFont('helvetica','normal');doc.setTextColor(40,24,64);doc.setFontSize(8.6);
+    const val=doc.splitTextToSize(String(d[k]),PW);
+    val.forEach(l=>{if(y>282){doc.addPage();y=18;}doc.text(l,ML,y);y+=4.6;});
+    y+=2;
+  });
+  return doc;
+}
+
+function enviar(){
+  const d=coletar();
+  const status=document.getElementById('status');
+  const btn=document.getElementById('btn');
+  if(!d.nome){ status.style.color='#B03A3A'; status.textContent='Por favor, preencha ao menos o nome.'; return; }
+  btn.disabled=true; status.style.color='#6B3FA0'; status.textContent='Enviando...';
+
+  const payload={
+    nome: d.nome,
+    corpo: montarTexto(d),
+    flagRisco: flagRisco(d)
+  };
+
+  // POST com text/plain evita o bloqueio de CORS (preflight) do Apps Script
+  fetch(SCRIPT_URL,{
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(payload)
+  }).then(r=>r.json().catch(()=>({ok:true}))).then(resp=>{
+    status.style.color='#2E7D4F';
+    status.textContent='✓ Respostas enviadas com sucesso para a Dra. Camila.';
+    try{ gerarPDF(d).save('Retorno_'+d.nome.replace(/\s+/g,'_')+'.pdf'); }catch(e){}
+    try{ localStorage.removeItem(SKEY); }catch(e){}
+    btn.textContent='Enviado ✓';
+  }).catch(err=>{
+    status.style.color='#B03A3A';
+    status.textContent='Não foi possível enviar. Verifique a conexão e tente novamente.';
+    btn.disabled=false;
+  });
+}
+</script>
+</body>
+</html>

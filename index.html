@@ -344,9 +344,10 @@ textarea{resize:vertical;min-height:58px}
       <input type="text" name="gestante_obs" id="gestante_obs" placeholder="Em qual fase?" style="display:none;margin-bottom:8px">
       <label class="q-l" style="font-weight:400">Houve alteração menstrual após início/ajuste das medicações?</label>
       <div class="opts row">
-        <label class="opt"><input type="radio" name="menstrual" value="Não"> Não</label>
-        <label class="opt"><input type="radio" name="menstrual" value="Sim"> Sim</label>
+        <label class="opt"><input type="radio" name="menstrual" value="Não" onchange="condMenstrual()"> Não</label>
+        <label class="opt"><input type="radio" name="menstrual" value="Sim" onchange="condMenstrual()"> Sim</label>
       </div>
+      <textarea name="menstrual_desc" id="menstrual_desc" placeholder="Descreva (atraso, ausência, fluxo diferente, cólicas...)" style="margin-top:8px;display:none"></textarea>
     </div>
   </div>
 
@@ -432,6 +433,7 @@ function condSubst(){ document.getElementById('substancias_freq').style.display=
 function condInterc(){ cond('intercorrencia','Sim','saude_obs'); }
 function condGestante(){ cond('gestacao','Gestante/amamentando/planejando','gestante_obs'); }
 function condSexual(){ cond('sexual','Sim','sexual_desc'); }
+function condMenstrual(){ cond('menstrual','Sim','menstrual_desc'); }
 function condPrejuizo(){ const e=document.querySelector('input[name="prejuizo"]:checked'); document.getElementById('prejuizo_obs').style.display=(e && /Muito|faltar/i.test(e.value))?'block':'none'; }
 function condPraticas(){ document.getElementById('praticas_obs').style.display=grupoTemAlgo('praticas','Nada disso')?'block':'none'; }
 function condRisco(){
@@ -468,7 +470,7 @@ function restaurar(){
     }
   });
   // reaplica todas as condicionais e o destaque visual
-  ['toggleSexo','condAdesao','condEA','condAtivacao','condToc','condApetite','condSubst','condInterc','condGestante','condSexual','condPrejuizo','condPraticas','condRisco','condAtencaoMed'].forEach(fn=>{ try{ window[fn](); }catch(e){} });
+  ['toggleSexo','condAdesao','condEA','condAtivacao','condToc','condApetite','condSubst','condInterc','condGestante','condSexual','condMenstrual','condPrejuizo','condPraticas','condRisco','condAtencaoMed'].forEach(fn=>{ try{ window[fn](); }catch(e){} });
   const osc=document.querySelector('input[value="Oscilando muito"]'); if(osc&&osc.checked) condOscila(osc);
   document.querySelectorAll('.opt input:checked').forEach(i=>i.closest('.opt').classList.add('checked'));
   atualizaProg();
@@ -502,7 +504,7 @@ const ROTULOS={
   toc:'Pensamentos/percepção',toc_desc:'Descrição',
   risco_ideacao:'⚠ Ideação',risco_plano:'⚠ Plano/autoagressão',risco_situacao:'⚠ Situação de risco',risco_desc:'⚠ Detalhe',
   apetite:'Apetite/peso',apetite_obs:'Obs. apetite',substancias:'Substâncias',substancias_freq:'Freq./quantidade',intercorrencia:'Intercorrência',saude_obs:'Detalhe intercorrência',exames:'Exames',psicoterapia:'Psicoterapia',
-  gestacao:'Gestação',gestante_obs:'Fase gestação',menstrual:'Alteração menstrual',sexual:'Alteração libido/sexual',sexual_desc:'Descrição libido/sexual',
+  gestacao:'Gestação',gestante_obs:'Fase gestação',menstrual:'Alteração menstrual',menstrual_desc:'Descrição menstrual',sexual:'Alteração libido/sexual',sexual_desc:'Descrição libido/sexual',
   esc_global:'Saúde mental (0-10)',prejuizo:'Prejuízo funcional',prejuizo_obs:'Obs. prejuízo',percep_tratamento:'Percepção do tratamento',praticas:'Demandas práticas',praticas_obs:'Detalhe práticas',extra:'Observações extras'
 };
 const ORDEM=Object.keys(ROTULOS);

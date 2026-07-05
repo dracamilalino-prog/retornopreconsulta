@@ -4,44 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Questionário Pré-Consulta de Retorno · Dra. Camila Lino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--lilas:#EBADFF;--roxo:#6B3FA0;--roxo2:#4B1A6E;--cream:#FBF7FF;--text:#2A1840;--muted:#8B7BA0;--border:#E6D9F2;}
+:root{--lilas:#EBADFF;--roxo:#6B3FA0;--roxo2:#4B1A6E;--cream:#FBF7FF;--text:#2A1840;--muted:#8B7BA0;--border:#E9DEF5;}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--cream);color:var(--text);line-height:1.5;padding-bottom:40px}
-.head{background:linear-gradient(135deg,var(--roxo2),var(--roxo));color:#fff;padding:24px 20px;text-align:center}
-.head .logo{width:50px;height:50px;border-radius:50%;border:2px solid var(--lilas);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-size:18px;font-weight:bold;color:var(--lilas);font-style:italic}
-.head h1{font-size:1.18rem;font-weight:600}
-.head .sub{font-size:.78rem;opacity:.85;margin-top:4px;letter-spacing:1px}
-.wrap{max-width:680px;margin:0 auto;padding:18px 14px}
-.intro{background:#fff;border:1px solid var(--border);border-radius:12px;padding:15px;font-size:.88rem;color:var(--muted);margin-bottom:16px}
-.prog{position:sticky;top:0;z-index:10;height:5px;background:var(--border);border-radius:3px;margin-bottom:16px;overflow:hidden}
-.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--roxo),var(--lilas));transition:width .3s}
-.sec{background:#fff;border:1px solid var(--border);border-radius:14px;padding:17px;margin-bottom:14px}
-.sec h2{font-size:.76rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--roxo);margin-bottom:13px;display:flex;align-items:center;gap:8px}
-.sec h2 .n{background:var(--lilas);color:var(--roxo2);width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;flex-shrink:0}
-.q{margin-bottom:15px}.q:last-child{margin-bottom:0}
-label.q-l{display:block;font-size:.9rem;font-weight:500;margin-bottom:7px}
-input[type=text],input[type=date],input[type=email],textarea,select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:.95rem;font-family:inherit;color:var(--text);background:var(--cream)}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--roxo)}
+body{font-family:'Quicksand',system-ui,sans-serif;background:var(--cream);background-image:radial-gradient(circle at 15% 8%, #F3E5FF 0%, transparent 45%),radial-gradient(circle at 85% 92%, #F7ECFF 0%, transparent 40%);background-attachment:fixed;color:var(--text);line-height:1.6;padding-bottom:40px}
+.head{background:linear-gradient(135deg,var(--roxo2),var(--roxo));color:#fff;padding:32px 20px 30px;text-align:center;border-radius:0 0 28px 28px;box-shadow:0 8px 24px -8px rgba(75,26,110,.35)}
+.head .logo{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--lilas),#fff2);border:2px solid rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:19px;font-weight:600;color:#fff;font-family:'Fraunces',serif;font-style:italic;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.head h1{font-family:'Fraunces',serif;font-weight:500;font-size:1.28rem;letter-spacing:.2px}
+.head .sub{font-size:.76rem;opacity:.85;margin-top:6px;letter-spacing:1.2px;font-weight:500}
+.wrap{max-width:680px;margin:0 auto;padding:20px 14px}
+.intro{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px 17px;font-size:.88rem;color:var(--muted);margin-bottom:18px;box-shadow:0 4px 16px -6px rgba(107,63,160,.14)}
+.prog{position:sticky;top:0;z-index:10;height:6px;background:var(--border);border-radius:6px;margin-bottom:18px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.04)}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--roxo),var(--lilas));transition:width .3s;border-radius:6px}
+.sec{background:#fff;border:1px solid var(--border);border-radius:18px;padding:19px 18px;margin-bottom:16px;box-shadow:0 4px 18px -8px rgba(107,63,160,.16)}
+.sec h2{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:.92rem;letter-spacing:.2px;text-transform:none;color:var(--roxo2);margin-bottom:15px;display:flex;align-items:center;gap:9px}
+.sec h2 .n{background:linear-gradient(135deg,var(--lilas),var(--roxo));color:#fff;width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-family:'Quicksand',sans-serif;font-weight:700;flex-shrink:0;box-shadow:0 2px 6px rgba(107,63,160,.35)}
+.q{margin-bottom:16px}.q:last-child{margin-bottom:0}
+label.q-l{display:block;font-size:.9rem;font-weight:600;margin-bottom:8px;color:var(--roxo2)}
+input[type=text],input[type=date],input[type=email],textarea,select{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:11px;font-size:.95rem;font-family:inherit;color:var(--text);background:var(--cream);transition:border-color .15s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--roxo);box-shadow:0 0 0 3px rgba(107,63,160,.12)}
 textarea{resize:vertical;min-height:58px}
-.opts{display:flex;flex-direction:column;gap:7px}
+.opts{display:flex;flex-direction:column;gap:8px}
 .opts.row{flex-direction:row;flex-wrap:wrap}
-.opt{display:flex;align-items:center;gap:9px;padding:12px 14px;min-height:44px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:.95rem;background:var(--cream)}
-.opt:hover{border-color:var(--lilas)}
+.opt{display:flex;align-items:center;gap:9px;padding:12px 14px;min-height:44px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;font-size:.95rem;background:var(--cream);transition:all .15s}
+.opt:hover{border-color:var(--lilas);transform:translateY(-1px)}
 .opt input{width:auto;margin:0;accent-color:var(--roxo)}
-.opt.checked{border-color:var(--roxo);background:#F6EDFF}
+.opt.checked{border-color:var(--roxo);background:#F6EDFF;box-shadow:0 2px 8px -2px rgba(107,63,160,.25)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .scale-row{display:flex;align-items:center;gap:10px}
 .scale-row input[type=range]{flex:1;accent-color:var(--roxo)}
-.scale-val{font-weight:bold;color:var(--roxo);min-width:40px;text-align:center;font-size:1.1rem}
-.risco{border:2px solid #E5A0A0;background:#FFF5F5}
-.risco h2{color:#B03A3A}.risco h2 .n{background:#E5A0A0;color:#7A1F1F}
-.alerta{background:#FFE8E8;border:1px solid #E5A0A0;border-radius:9px;padding:11px;font-size:.83rem;color:#8A2020;margin-top:11px;font-weight:500}
-.btn{width:100%;padding:15px;border:none;border-radius:11px;background:linear-gradient(135deg,var(--roxo),var(--roxo2));color:#fff;font-size:1.02rem;font-weight:600;cursor:pointer;margin-top:6px;font-family:inherit}
+.scale-val{font-weight:700;color:var(--roxo);min-width:40px;text-align:center;font-size:1.15rem;font-family:'Fraunces',serif}
+.risco{border:2px solid #F0BFBF;background:#FFF7F7}
+.risco h2{color:#B03A3A}.risco h2 .n{background:linear-gradient(135deg,#E5A0A0,#B03A3A);color:#fff}
+.alerta{background:#FFECEC;border:1px solid #EFB3B3;border-radius:12px;padding:12px 14px;font-size:.83rem;color:#8A2020;margin-top:12px;font-weight:500}
+.btn{width:100%;padding:16px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--roxo),var(--roxo2));color:#fff;font-size:1.03rem;font-weight:600;cursor:pointer;margin-top:8px;font-family:'Quicksand',sans-serif;box-shadow:0 6px 18px -6px rgba(75,26,110,.45);transition:transform .15s, box-shadow .15s}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 22px -6px rgba(75,26,110,.5)}
 .btn:disabled{opacity:.6}
-.status{text-align:center;margin-top:13px;font-size:.92rem;font-weight:500;min-height:22px}
-.foot{text-align:center;font-size:.72rem;color:var(--muted);margin-top:18px;line-height:1.6}
+.status{text-align:center;margin-top:14px;font-size:.92rem;font-weight:600;min-height:22px}
+.foot{text-align:center;font-size:.74rem;color:var(--muted);margin-top:20px;line-height:1.7}
 </style>
 </head>
 <body>

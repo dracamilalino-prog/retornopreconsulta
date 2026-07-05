@@ -27,7 +27,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--roxo)}
 textarea{resize:vertical;min-height:58px}
 .opts{display:flex;flex-direction:column;gap:7px}
 .opts.row{flex-direction:row;flex-wrap:wrap}
-.opt{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:.9rem;background:var(--cream)}
+.opt{display:flex;align-items:center;gap:9px;padding:12px 14px;min-height:44px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;font-size:.95rem;background:var(--cream)}
 .opt:hover{border-color:var(--lilas)}
 .opt input{width:auto;margin:0;accent-color:var(--roxo)}
 .opt.checked{border-color:var(--roxo);background:#F6EDFF}
@@ -75,6 +75,7 @@ textarea{resize:vertical;min-height:58px}
       </div>
     </div>
     <div class="q"><label class="q-l">Identidade de gênero</label>
+      <p style="font-size:.78rem;color:var(--muted);margin:2px 0 8px;line-height:1.5;">Cisgênero = você se identifica com o gênero que te disseram ao nascer.</p>
       <div class="opts row">
         <label class="opt"><input type="radio" name="genero" value="Cisgênero"> Cisgênero</label>
         <label class="opt"><input type="radio" name="genero" value="Mulher trans"> Mulher trans</label>
